@@ -96,6 +96,11 @@ var UIcontroller = (function(){
  inputBtn: '.add__btn',
  incomeContainer: '.income__list',
  expensesContainer: '.expenses__list',
+ budgetLabel: '.budget__value',
+ incomeLabel: '.budget__income--value',
+ expenseLabel: '.budget__expenses--value',
+ percentageLabel: '.budget__expenses--percentage',
+ container: '.container ',
     };
 return {
     getInput:function(){ 
@@ -110,10 +115,10 @@ return {
             //create HTML string with placeholder text
             if(type ==='inc'){
                 element = DOMstrings.incomeContainer;
-                html = `<div class="item clearfix" id="income-%id%"><div class="item__description">%description%</div><div class="right clearfix"><div class="item__value">%value%</div><div class="item__delete"><button class="item__delete--btn"><i class="ion-ios-close-outline"></i></button></div></div></div>`
+                html = `<div class="item clearfix" id="inc-%id%"><div class="item__description">%description%</div><div class="right clearfix"><div class="item__value">%value%</div><div class="item__delete"><button class="item__delete--btn"><i class="ion-ios-close-outline"></i></button></div></div></div>`
             } else if (type ==='exp'){
                 element = DOMstrings.expensesContainer;
-                html = '<div class="item clearfix" id="expense-%id%"><div class="item__description">%description%</div><div class="right clearfix"><div class="item__value">%value%</div><div class="item__percentage">10%</div><div class="item__delete"><button class="item__delete--btn"><i class="ion-ios-close-outline"></i></button></div></div></div>'
+                html = '<div class="item clearfix" id="exp-%id%"><div class="item__description">%description%</div><div class="right clearfix"><div class="item__value">%value%</div><div class="item__percentage">10%</div><div class="item__delete"><button class="item__delete--btn"><i class="ion-ios-close-outline"></i></button></div></div></div>'
             }
                 //replace the placeholder text with some actual data
                 newHtml = html.replace('%id%', obj.id);
@@ -135,7 +140,16 @@ return {
         },
 
 
-
+            displayBudged: function(obj){
+                    document.querySelector(DOMstrings.budgetLabel).textContent = obj.budget;
+                    document.querySelector(DOMstrings.incomeLabel).textContent = obj.totalInc;
+                    document.querySelector(DOMstrings.expenseLabel).textContent = obj.totalExp;
+                    if(obj.percentage > 0){
+                    document.querySelector(DOMstrings.percentageLabel).textContent = obj.percentage + '%';
+                    } else{
+                        document.querySelector(DOMstrings.percentageLabel).textContent = '--'
+                    }
+                },
 
 
     getDOMstrings: ()=> DOMstrings,
@@ -159,7 +173,8 @@ var controller = (function(budgetCtrl, UICtrl){
             if (event.keyCode ===13 || event.which ===13){
                 UICtrl.ctrlAddItem();
             }
-             })
+             });
+             document.querySelector(DOM.container).addEventListener('click',ctrlDeleteItem)
             
     }
     var updateBudged = function(){
@@ -168,7 +183,7 @@ var controller = (function(budgetCtrl, UICtrl){
             // return the budget
             var budged = budgetCtrl.getBudged();
      // display the budget on the UI
-     console.info(budged);
+     UICtrl.displayBudged(budged);
     }
 
     
@@ -187,9 +202,27 @@ var controller = (function(budgetCtrl, UICtrl){
         updateBudged();
      }
     }
+    var ctrlDeleteItem = function(event){
+        var itemID, splitID,type,ID;
+            itemID = event.target.parentNode.parentNode.parentNode.parentNode.id;
+            if(itemID){
+                    splitID = itemID.split('-');
+                    type = splitID[0];
+                    ID= splitID[1]
+                    // delete the item from the data structure
+                    // delete the item from the user interface
+            }
+
+    };
     return {
         init: function(){
-            setupEventListner();
+            setupEventListner(),
+            UICtrl.displayBudged({ 
+                budged:0,
+                totalInc:0,
+                totalExp:0,
+                percentage:0,
+            });
         }
     }
  
