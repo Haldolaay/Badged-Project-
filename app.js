@@ -49,6 +49,21 @@ return {
             //return our new element
             return newItem;
     },
+    deleteItem: function(type,id){
+            var ids, index;
+            //if id = 6
+            //and the array is ids =[1,2,4,6,8]
+            // we need the index of id =3
+             ids =data.allItems[type].map(function(current){
+                return current.id
+            });
+            index = ids.indexOf(id);
+            if (index !== -1){
+                data.allItems[type].splice(index,1);
+
+            }
+            
+    },
     calculateBudget: function(){
         //calculate total income and expenses
         calculateTotal('inc');
@@ -171,7 +186,7 @@ var controller = (function(budgetCtrl, UICtrl){
         document.querySelector(DOM.inputBtn).addEventListener('click',ctrlAddItem);
         document.addEventListener('keypress', function(event){
             if (event.keyCode ===13 || event.which ===13){
-                UICtrl.ctrlAddItem();
+                ctrlAddItem();
             }
              });
              document.querySelector(DOM.container).addEventListener('click',ctrlDeleteItem)
@@ -208,8 +223,9 @@ var controller = (function(budgetCtrl, UICtrl){
             if(itemID){
                     splitID = itemID.split('-');
                     type = splitID[0];
-                    ID= splitID[1]
+                    ID= parseInt(splitID[1]);
                     // delete the item from the data structure
+                    budgetCtrl.deleteItem(type,ID);
                     // delete the item from the user interface
             }
 
