@@ -142,7 +142,14 @@ return {
             // insert the HTML into the DOM
             document.querySelector(element).insertAdjacentHTML("beforeend", newHtml);
     },
-    
+
+                deleteListItem: function(selectorID){
+             // we first got the parantNode, then from there we put the childnode id , it looks complicated but it's not 
+             //document.getElementById(selectorID).parentNode.removeChild(document.getElementById(selectorID))
+                    var el = document.getElementById(selectorID);
+                    el.parentNode.removeChild(el);
+                },
+
         clearFields: function(){
             var fields,fieldsArr;
             fields=document.querySelectorAll(DOMstrings.inputDescription +', '+ DOMstrings.inputValue)
@@ -227,6 +234,9 @@ var controller = (function(budgetCtrl, UICtrl){
                     // delete the item from the data structure
                     budgetCtrl.deleteItem(type,ID);
                     // delete the item from the user interface
+                    UICtrl.deleteListItem(itemID)
+                    // update and show the new budget
+                    updateBudged();
             }
 
     };
