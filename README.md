@@ -1,3 +1,3 @@
 # Badged-Project-
-process of learning
- from an online coding tutorial, still work in progress! 
+done and working 
+simple budget app built useing IIFI's and UI control
